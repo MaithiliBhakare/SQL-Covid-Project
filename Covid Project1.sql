@@ -67,6 +67,17 @@ order by DeathPercentage desc
 
 SELECT * FROM [Portfolio project1].. [covid vaccinations]
 
+SELECT x.continent, x.location, x.date, x.population, y.new_vaccinations
+FROM [Portfolio project1]..[covid deaths] x
+JOIN [Portfolio project1].. [covid vaccinations] y
+ON x.location = y.location
+and x.date = y.date
+AND x.continent = y.continent
+WHERE x.continent is not null
+ORDER BY 1,2
+
+-- Vaccinations per day. Rolling Count of Vaccinations
+
 SELECT x.continent, x.location, x.date, x.population, y.new_vaccinations, SUM(convert(bigint,y.new_vaccinations)) OVER (Partition by x.location order by x.date, x.location) as RollingPeopleVac
 FROM [Portfolio project1]..[covid deaths] x
 JOIN [Portfolio project1].. [covid vaccinations] y
