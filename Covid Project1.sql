@@ -87,7 +87,7 @@ and x.date = y.date
 where x.continent is not null
 order by 2,3
 
--- Using CTE to perform Calculation on Partition By in previous query
+-- Using CTE to perform Calculation on Partition By in previous query. How many people in the country are vaccinated?
 
 WITH PopvsVac (Continent, location, date, population, new_vaccinations, RollingPeopleVac)
 as
@@ -98,7 +98,6 @@ JOIN [Portfolio project1].. [covid vaccinations] y
 ON x.location = y.location
 and x.date = y.date
 where x.continent is not null
---order by 2,3
 )
 SELECT *, (RollingPeopleVac/population)*100
 FROM PopvsVac
@@ -122,12 +121,11 @@ JOIN [Portfolio project1].. [covid vaccinations] y
 ON x.location = y.location
 and x.date = y.date
 where x.continent is not null
---order by 2,3
 
 SELECT *, (RollingPeopleVac/population)*100 as RollingPeopleVaccpermil
 FROM PercentPopulVacc
 
--- Creating View to store data for later visualizations
+-- Creating View to store data for visualizations
 
 CREATE VIEW PercentPopulVacci AS
 SELECT x.continent, x.location, x.date, x.population, y.new_vaccinations, SUM(convert(bigint,y.new_vaccinations)) OVER (Partition by x.location order by x.date, x.location) as RollingPeopleVac
