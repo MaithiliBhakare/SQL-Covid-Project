@@ -33,19 +33,19 @@ order by PercentCasespermillion desc
 
 -- Countries with Highest Death Count per Population
 
-SELECT location, max(cast(total_deaths as int)) as HighestDeath
+SELECT location, max(cast(total_deaths as int)) as HighestDeathCountry
  FROM [Portfolio project1]..[covid deaths]
  where continent is not null
  Group by location
-order by HighestDeath desc
+order by HighestDeathCountry desc
 
 -- Showing contintents with the highest death count per population
 
-SELECT continent, max(cast(total_deaths as int)) as HighestDeath
+SELECT continent, max(cast(total_deaths as int)) as HighestDeathContinent
  FROM [Portfolio project1]..[covid deaths]
- where continent is not null
+ where continent is null
  Group by continent
-order by HighestDeath desc
+order by HighestDeathContinent desc
 
 -- GLOBAL NUMBERS
 
