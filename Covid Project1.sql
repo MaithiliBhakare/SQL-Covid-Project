@@ -56,25 +56,27 @@ SELECT date, SUM(cast(new_cases as int)) as total_cases, SUM(CAST(new_deaths as 
  Group by date
 order by DeathPercentage desc
 
---Total Population vs Vaccinations
-
 SELECT SUM(cast(new_cases as int)) as total_cases, SUM(CAST(new_deaths as int)) as total_deaths, ((SUM(CAST(new_deaths as int))/SUM(new_cases))*100) as DeathPercentage --total_deaths, total_cases, (total_deaths/total_cases)*100 as DeathPercent
  FROM [Portfolio project1]..[covid deaths]
  where continent is not null
- --where location like '%India%'
- --Group by date
+ AND location like '%India%'
+ Group by date
 order by DeathPercentage desc
 
--- Using CTE to perform Calculation on Partition By in previous query
+-- Total Population vs Vaccinations
+
+SELECT * FROM [Portfolio project1].. [covid vaccinations]
 
 SELECT x.continent, x.location, x.date, x.population, y.new_vaccinations, SUM(convert(bigint,y.new_vaccinations)) OVER (Partition by x.location order by x.date, x.location) as RollingPeopleVac
 FROM [Portfolio project1]..[covid deaths] x
 JOIN [Portfolio project1].. [covid vaccinations] y
 ON x.location = y.location
 and x.date = y.date
---and x.continent = y.continent
+-- and x.continent = y.continent
 where x.continent is not null
 order by 2,3
+
+-- Using CTE to perform Calculation on Partition By in previous query
 
 WITH PopvsVac (Continent, location, date, population, new_vaccinations, RollingPeopleVac)
 as
